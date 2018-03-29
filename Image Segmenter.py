@@ -35,7 +35,7 @@ img.save('image.png')
 # In[24]:
 
 
-def is_background(colno):
+def is_background(colno,mat):
     row,col=mat.shape
     for i in range(0,row):
         if mat[i][colno]<0.9:
@@ -46,11 +46,11 @@ def is_background(colno):
 # In[25]:
 
 
-def get_matrix(col_no):
+def get_matrix(col_no,mat):
     matrix=[]
     row,col=mat.shape
     for i in range(col_no,col):
-        if is_background(i)==False:
+        if is_background(i,mat)==False:
             z=mat[:,i]
             matrix.append(z)
         else:
@@ -66,20 +66,20 @@ def get_matrix(col_no):
 # In[26]:
 
 
-def get_char_img():
+def get_char_img(mat):
     row,col=mat.shape
     col_no=0
     curr_col=0
     while True:
         for i in range(curr_col,col):
-            found=is_background(i)
+            found=is_background(i,mat)
             if found==False:
                 col_no=i
                 break
         if i==col-1:
             break
         else:
-            curr_col=get_matrix(col_no)
+            curr_col=get_matrix(col_no,mat)
         
 
 
@@ -103,7 +103,7 @@ def process_image():
 def pad_image(image):
     col=len(image[0])
     reqd_col=20-col
-    front=reqd_col/2
+    front=int(reqd_col/2)
     back=reqd_col-front
     
     for i in range(20):
@@ -112,16 +112,21 @@ def pad_image(image):
         for j in range(back):
             image[i].append(1)
     pyplot.imshow(np.matrix(image),cmap=cm.gray)
-    pyplot.show()    
+    pyplot.show()
+    return image
 
 
 # In[29]:
 
+def main():
+    img=process_image()
+    mat=img
+    to_pred=[]
+    get_char_img(mat)
+    for i in image_arr:
+        to_pred.append(pad_image(i))
+    return pad_image
 
-img=process_image()
 image_arr=[]
-mat=img
-get_char_img()
-for i in image_arr:
-    pad_image(i)
+main()
 
