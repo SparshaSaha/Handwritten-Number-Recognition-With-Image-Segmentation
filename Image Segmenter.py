@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[22]:
+# In[1]:
 
 
 import tensorflow as tf
@@ -17,25 +17,12 @@ import matplotlib.cm as cm
 from pprint import pprint
 import scipy.misc
 import PIL
+image_arr=[]
+
+# In[2]:
 
 
-# # IMAGE RESIZER
-
-# In[23]:
-
-
-baseheight = 20
-img = Image.open('450.png')
-hpercent = (baseheight / float(img.size[1]))
-wsize = int((float(img.size[0]) * float(hpercent)))
-img = img.resize((wsize, baseheight), PIL.Image.ANTIALIAS)
-img.save('image.png')
-
-
-# In[24]:
-
-
-def is_background(colno,mat):
+def is_background(mat,colno):
     row,col=mat.shape
     for i in range(0,row):
         if mat[i][colno]<0.9:
@@ -43,14 +30,14 @@ def is_background(colno,mat):
     return True
 
 
-# In[25]:
+# In[3]:
 
 
-def get_matrix(col_no,mat):
+def get_matrix(mat,col_no):
     matrix=[]
     row,col=mat.shape
     for i in range(col_no,col):
-        if is_background(i,mat)==False:
+        if is_background(mat,i)==False:
             z=mat[:,i]
             matrix.append(z)
         else:
@@ -63,7 +50,7 @@ def get_matrix(col_no,mat):
     return i
 
 
-# In[26]:
+# In[4]:
 
 
 def get_char_img(mat):
@@ -72,22 +59,22 @@ def get_char_img(mat):
     curr_col=0
     while True:
         for i in range(curr_col,col):
-            found=is_background(i,mat)
+            found=is_background(mat,i)
             if found==False:
                 col_no=i
                 break
         if i==col-1:
             break
         else:
-            curr_col=get_matrix(col_no,mat)
+            curr_col=get_matrix(mat,col_no)
         
 
 
-# In[27]:
+# In[22]:
 
 
 def process_image():
-    img=scipy.misc.imread('image.png')
+    img=scipy.misc.imread('conv.png')
     img=img[:,:,0]
     img=img/255.0
     pyplot.imshow(img,cmap=cm.gray)
@@ -97,36 +84,77 @@ def process_image():
 
 # # SEGMENTED IMAGE PADDING FUNCTION
 
-# In[28]:
+# In[23]:
 
 
-def pad_image(image):
-    col=len(image[0])
-    reqd_col=20-col
-    front=int(reqd_col/2)
-    back=reqd_col-front
+def pad_image_and_resize(image):
+    image_crop=get_cropped_image(image)
+    baseheight = 20
+    scipy.misc.imsave('temp.jpg', np.matrix(image_crop))
+    img=Image.open('temp.jpg')
+    hpercent = (baseheight / float(img.size[1]))
+    wsize = int((float(img.size[0]) * float(hpercent)))
+    img = img.resize((wsize, baseheight), PIL.Image.ANTIALIAS)
     
-    for i in range(20):
-        for j in range(front):
+    #pyplot.imshow(np.matrix(img),cmap=cm.gray)
+    #pyplot.show()
+    return img
+    
+
+
+# In[70]:
+
+
+def get_cropped_image(image):
+    new_img=[]
+    for i in image:
+        x=True
+        for j in i:
+            if j<0.5:
+                x=False
+                break
+        if x==False:
+            new_img.append(i)
+    image=np.matrix(new_img)
+    
+    row,col=image.shape
+    image=image.tolist()
+    for i in range(row):
+        for j in range(10):
             image[i].insert(0,1)
-        for j in range(back):
+        for j in range(10):
             image[i].append(1)
-    pyplot.imshow(np.matrix(image),cmap=cm.gray)
-    pyplot.show()
+    row=len(image)
+    col=len(image[0])
+    
+    for j in range(10):
+        image.append([1.0 for i in range(col)])
+    for j in range(10):
+        image.insert(0,[1.0 for i in range(col)])
+    row=len(image)
+    col=len(image[0])
+    if row>col:
+        diff=row-col
+        front=int(diff/2)
+        back=diff-front
+        for i in range(row):
+            for j in range(back):
+                image[i].append(1)
+            for j in range(front):
+                image[i].insert(0,1)
+            
     return image
+    
 
 
-# In[29]:
-
+# In[80]:
 def main():
+
     img=process_image()
     mat=img
-    to_pred=[]
     get_char_img(mat)
-    for i in image_arr:
-        to_pred.append(pad_image(i))
-    return pad_image
-
-image_arr=[]
-main()
+    arr=[]
+    for i in range(len(image_arr)):
+        arr.append(pad_image_and_resize(image_arr[i]))
+    return arr
 
