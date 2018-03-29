@@ -44,8 +44,8 @@ def get_matrix(mat,col_no):
             break
     matrix=np.matrix(matrix)
     matrix=np.transpose(matrix)
-    pyplot.imshow(matrix,cmap=cm.gray)
-    pyplot.show()
+    #pyplot.imshow(matrix,cmap=cm.gray)
+    #pyplot.show()
     image_arr.append(matrix.tolist())
     return i
 
@@ -77,8 +77,8 @@ def process_image():
     img=scipy.misc.imread('conv.png')
     img=img[:,:,0]
     img=img/255.0
-    pyplot.imshow(img,cmap=cm.gray)
-    pyplot.show()
+    #pyplot.imshow(img,cmap=cm.gray)
+    #pyplot.show()
     return img
 
 
@@ -149,7 +149,6 @@ def get_cropped_image(image):
 
 # In[80]:
 def main():
-
     img=process_image()
     mat=img
     get_char_img(mat)
