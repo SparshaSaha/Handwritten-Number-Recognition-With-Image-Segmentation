@@ -148,8 +148,7 @@ def get_cropped_image(image):
 
 
 # In[80]:
-def main(file_name):
-    img=process_image(file_name)
+def main(img):
     mat=img
     get_char_img(mat)
     arr=[]

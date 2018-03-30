@@ -15,9 +15,9 @@ import PIL
 
 
 # In[5]:
+image_arr=[]
 
-
-def is_background(rowno):
+def is_background(rowno,mat):
     row,col=mat.shape
     for i in range(0,col):
         if mat[rowno][i]<0.9:
@@ -25,35 +25,15 @@ def is_background(rowno):
     return True
 
 
-# In[6]:
-
-
-def get_matrix(row_no):
-    matrix=[]
-    row,col=mat.shape
-    for i in range(row_no,row):
-        if is_background(i)==False:
-            z=mat[:,i]
-            matrix.append(z)
-        else:
-            break
-    matrix=np.matrix(matrix)
-    matrix=np.transpose(matrix)
-    pyplot.imshow(matrix,cmap=cm.gray)
-    pyplot.show()
-    image_arr.append(matrix.tolist())
-    return i
-
-
 # In[7]:
 
 
-def get_line_img():
+def get_line_img(mat):
     row,col=mat.shape
     row_no=0
     new_img=[]
     for i in range(row):
-        if is_background(i)==False:
+        if is_background(i,mat)==False:
             new_img.append(mat[i])
         else:
             if len(new_img)!=0:
@@ -65,8 +45,8 @@ def get_line_img():
 # In[3]:
 
 
-def process_image():
-    img=scipy.misc.imread('conv.png')
+def process_image(ima):
+    img=scipy.misc.imread(ima)
     img=img[:,:,0]
     img=img/255.0
     pyplot.imshow(img,cmap=cm.gray)
@@ -76,12 +56,9 @@ def process_image():
 
 # In[12]:
 
-
-img=process_image()
-image_arr=[]
-mat=img
-get_line_img()
-for i in image_arr:
-    pyplot.imshow(np.matrix(i),cmap=cm.gray)
-    pyplot.show()
+def main(image_name):
+    img=process_image(image_name)
+    mat=img
+    get_line_img(mat)
+    return image_arr
 
