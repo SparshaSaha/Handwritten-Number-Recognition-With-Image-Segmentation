@@ -49,8 +49,6 @@ def process_image(ima):
     img=scipy.misc.imread(ima)
     img=img[:,:,0]
     img=img/255.0
-    pyplot.imshow(img,cmap=cm.gray)
-    pyplot.show()
     return img
 
 
