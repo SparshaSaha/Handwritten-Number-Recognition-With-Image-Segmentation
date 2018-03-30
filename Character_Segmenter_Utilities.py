@@ -75,7 +75,6 @@ def get_char_img(mat):
 
 def process_image(file_name):
     img=scipy.misc.imread(file_name)
-    img=img[:,:,0]
     img=img/255.0
     #pyplot.imshow(img,cmap=cm.gray)
     #pyplot.show()
@@ -149,8 +148,8 @@ def get_cropped_image(image):
 
 # In[80]:
 def main(img):
-    mat=img
-    get_char_img(mat)
+    matr=process_image(img)
+    get_char_img(matr)
     arr=[]
     for i in range(len(image_arr)):
         arr.append(pad_image_and_resize(image_arr[i]))
