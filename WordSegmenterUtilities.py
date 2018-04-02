@@ -78,7 +78,9 @@ def get_words(mat,threshold):
 
 
 
-def main(img):
+def main(filename):
+    img=scipy.misc.imread(filename)
+    img=img/255.0
 
     g=get_threshold(img)
 
@@ -92,7 +94,7 @@ def main(img):
 
 
 
-    d=get_words(img,threshold)
+    d=get_words(img,mini)
     words=[]
     for i in range(0,len(d)-1,2):
         if d[i+1]-d[i]>0:
