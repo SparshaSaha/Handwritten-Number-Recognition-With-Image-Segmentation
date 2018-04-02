@@ -35,7 +35,6 @@ def get_next_nonbackground(mat,colno):
         if is_background(mat,i)==False:
             return i
     return col-1
-            
 
 
 # In[17]:
@@ -87,7 +86,13 @@ def main(filename):
     f=km.get_clusters(g,2)
 
     mini=999999
-    for i in f[1]:
+    x=[]
+    if f[1][0][0]>f[0][0][0]:
+        x=f[1]
+    else:
+        x=f[0]
+        
+    for i in x:
         if i[0] <mini:
             mini=i[0]
 
@@ -100,6 +105,6 @@ def main(filename):
         if d[i+1]-d[i]>0:
             words.append(img[:,d[i]:d[i+1]+2])
 
+
     return words
-     
 
