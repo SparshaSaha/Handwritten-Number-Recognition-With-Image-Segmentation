@@ -74,13 +74,24 @@ def get_words(mat,threshold):
 
 
 # In[35]:
+def crop_line(mat):
+    row,col=mat.shape
+    newimg=[]
+    front=0
+    for i in range(col):
+        if is_background(mat,i)==False:
+            front=i
+            break
 
+    newimg=mat[:,front-1:]
+    return newimg
+    
 
 
 def main(filename):
     img=scipy.misc.imread(filename)
     img=img/255.0
-
+    img=crop_line(img)
     g=get_threshold(img)
 
     f=km.get_clusters(g,2)
@@ -107,4 +118,3 @@ def main(filename):
 
 
     return words
-
