@@ -80,7 +80,7 @@ def crop_line(mat):
     front=0
     for i in range(col):
         if is_background(mat,i)==False:
-            front=i
+            front=i-2
             break
 
     newimg=mat[:,front-1:]
