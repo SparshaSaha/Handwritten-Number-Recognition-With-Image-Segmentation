@@ -47,7 +47,7 @@ def get_line_img(mat):
 
 def process_image(ima):
     img=scipy.misc.imread(ima)
-    img=img[:,:,0]
+    #img=img[:,:,0]
     img=img/255.0
     return img
 
